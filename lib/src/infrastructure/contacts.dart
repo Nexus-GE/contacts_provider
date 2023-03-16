@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:contacts_provider/src/infrastructure/contacts_delegate.dart';
-import 'package:contacts_provider/src/infrastructure/contstants.dart';
+import 'package:contacts_provider/src/infrastructure/constants.dart';
 import 'package:contacts_provider/src/infrastructure/events.dart';
 import 'package:contacts_provider/src/interfaces/i_contacts.dart';
 import 'package:contacts_provider/src/interfaces/i_events.dart';
@@ -73,9 +73,7 @@ class Contacts implements IContacts {
 
     Listentocontacts().onContactsChanged.listen((_) async {
       if (_onChange != null) _onChange!();
-      if (localCopy == null) {
-        return;
-      }
+
       final latest = await readContacts();
       final contactsDelegate = ContactsDelegate(
         streamController,
@@ -110,6 +108,8 @@ class Contacts implements IContacts {
               _onUpdate!(contactEvent);
             }
             break;
+          default:
+            break;
         }
       },
     );
@@ -142,8 +142,8 @@ class Contacts implements IContacts {
   FutureOr<void> updateLocalCopy() async {
     final contacts = await readContacts();
     final stringifiedContacts = ContactConverter.stringify(contacts);
-    final result =
-        await _prefs?.setString(sharedPrefsKeyName, stringifiedContacts);
+
+    await _prefs?.setString(sharedPrefsKeyName, stringifiedContacts);
   }
 
   bool get localCopyExists {
@@ -182,10 +182,7 @@ class Contacts implements IContacts {
     return Future.value(1);
   }
 
-  @override
   void dispose() {
-    if (streamController != null) {
-      streamController.close();
-    }
+    streamController.close();
   }
 }

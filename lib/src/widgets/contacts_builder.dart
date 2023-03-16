@@ -1,20 +1,17 @@
 import 'package:contacts_provider/src/infrastructure/contacts.dart';
 import 'package:contacts_provider/src/infrastructure/events.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter/widgets.dart';
 
 typedef ContactsBuilderBuild = Widget Function(BuildContext, ContactEvent);
 
 class ContactsBuilder extends StatefulWidget {
-  Function()? onChange;
-  ContactsAction? onUpdate;
-  ContactsAction? onCreate;
-  ContactsAction? onDelete;
-  ContactsBuilderBuild builder;
+  final Function()? onChange;
+  final ContactsAction? onUpdate;
+  final ContactsAction? onCreate;
+  final ContactsAction? onDelete;
+  final ContactsBuilderBuild builder;
 
-  ContactsBuilder({
+  const ContactsBuilder({
     super.key,
     this.onChange,
     this.onCreate,
@@ -28,7 +25,7 @@ class ContactsBuilder extends StatefulWidget {
 }
 
 class _ContactsBuilderState extends State<ContactsBuilder> {
-  Contacts _contacts = Contacts();
+  final _contacts = Contacts();
 
   @override
   void initState() {

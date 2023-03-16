@@ -23,8 +23,6 @@ class ContactConverter {
 
     final dynamic contactsList = jsonDecode(contacts);
 
-    print(contactsList);
-    print(contactsList.runtimeType);
     for (Map contactMap in contactsList) {
       contactMap['avatar'] =
           Uint8List.fromList(contactMap['avatar'].cast<int>());

@@ -32,7 +32,7 @@ class _HomePageState extends StatelessWidget {
 
         // you can access the event from here.
 
-        // new contact list after event has happend
+        // new contact list after event has happened
         event.contactList; 
 
         // only effected contact list, in case of create

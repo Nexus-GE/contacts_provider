@@ -19,7 +19,7 @@ class ContactsDelegate extends ContactsStreamable with BaseEvents {
   final Map<String, Contact> localCopy;
   final List<Contact> latest;
 
-  BehaviorSubject _eventStreamController;
+  final BehaviorSubject _eventStreamController;
 
   ContactsDelegate(
     this._eventStreamController, {
@@ -34,7 +34,6 @@ class ContactsDelegate extends ContactsStreamable with BaseEvents {
     for (var latestContact in latest) {
       if (hasCreated(latestContact, localCopy)) {
         _create.effectedContacts.add(latestContact);
-        print("==== created");
         continue;
       }
 
@@ -42,7 +41,6 @@ class ContactsDelegate extends ContactsStreamable with BaseEvents {
       if (hasUpdated(latestContact, localContact!)) {
         _update.effectedContacts.add(latestContact);
         localCopy.remove(latestContact.identifier);
-        print("==== updated");
         continue;
       }
 
@@ -50,7 +48,6 @@ class ContactsDelegate extends ContactsStreamable with BaseEvents {
     }
     if (hasDeleted(localCopy)) {
       _delete.effectedContacts.addAll(localCopy.values);
-      print("==== deleted");
     }
 
     if (_update.hasHappened) _eventStreamController.add(_update);
