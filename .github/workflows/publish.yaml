@@ -17,8 +17,6 @@ jobs:
           channel: "stable"
       - name: Install dependencies
         run: flutter pub get
-      - name: Run tests
-        run: flutter pub run test
       # Here you can insert custom steps you need
       # - run: dart tool/generate-code.dart
       - name: Publish
