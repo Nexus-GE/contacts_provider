@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:contacts_provider/src/infrastructure/contacts_delegate.dart';
 import 'package:contacts_provider/src/infrastructure/contstants.dart';
 import 'package:contacts_provider/src/infrastructure/events.dart';
@@ -8,11 +6,10 @@ import 'package:contacts_provider/src/interfaces/i_contacts.dart';
 import 'package:contacts_provider/src/interfaces/i_events.dart';
 import 'package:contacts_provider/src/utils/converter.dart';
 import 'package:contacts_service/contacts_service.dart';
-import 'package:flutter/material.dart';
 import 'package:listentocontacts/listentocontacts.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:collection/collection.dart';
 
 typedef ContactsAction = Function(ContactEvent contactEvent);
 
@@ -81,7 +78,7 @@ class Contacts implements IContacts {
       }
       final latest = await readContacts();
       final contactsDelegate = ContactsDelegate(
-        streamController!,
+        streamController,
         localCopy: localCopy,
         latest: latest,
       );
@@ -160,7 +157,7 @@ class Contacts implements IContacts {
     if (localCopyString == null) {
       return {};
     }
-    return ContactConverter.fromStringAsMap(localCopyString!);
+    return ContactConverter.fromStringAsMap(localCopyString);
   }
 
   void compare() {}
@@ -175,6 +172,14 @@ class Contacts implements IContacts {
   @override
   List writeContacts() {
     throw UnimplementedError();
+  }
+
+  Future handlePermissions() async {
+    var contactStatus = await Permission.contacts.status;
+    if (contactStatus.isDenied) {
+      await Permission.contacts.request().isGranted;
+    }
+    return Future.value(1);
   }
 
   @override
