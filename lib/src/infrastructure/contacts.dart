@@ -50,6 +50,9 @@ class Contacts implements IContacts {
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
 
+    _initEventListener();
+    _initContactListener();
+
     if (!localCopyExists) {
       await updateLocalCopy();
 
@@ -60,21 +63,25 @@ class Contacts implements IContacts {
       );
 
       streamController.add(initialEvent);
-    }
+    } else {}
+  }
 
+  _initContactListener() {
     Listentocontacts().onContactsChanged.listen((_) async {
       if (_onChange != null) _onChange!();
 
       final latest = await readContacts();
-      final contactsDelegate = ContactsDelegate(
+      ContactsDelegate(
         streamController,
         localCopy: localCopy,
         latest: latest,
-      );
-      contactsDelegate();
+      )();
+
       updateLocalCopy();
     });
+  }
 
+  _initEventListener() {
     streamController.stream.listen(
       (contactEvent) {
         switch (contactEvent.event) {
