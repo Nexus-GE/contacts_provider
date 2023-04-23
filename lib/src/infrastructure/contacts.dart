@@ -17,13 +17,13 @@ class Contacts implements IContacts {
   SharedPreferences? _prefs;
   BehaviorSubject<ContactEvent> streamController = BehaviorSubject();
 
-  Function(ContactEvent contactEvent)? _onDelete;
+  void Function()? _onChange;
 
-  Function(ContactEvent contactEvent)? _onUpdate;
+  void Function(ContactEvent contactEvent)? _onCreate;
 
-  Function(ContactEvent contactEvent)? _onCreate;
+  void Function(ContactEvent contactEvent)? _onUpdate;
 
-  Function()? _onChange;
+  void Function(ContactEvent contactEvent)? _onDelete;
 
   set setOnDelete(ContactsAction? onDelete) => _onDelete = onDelete;
 
@@ -35,12 +35,28 @@ class Contacts implements IContacts {
 
   static Contacts? _instance;
 
-  factory Contacts() {
-    _instance ??= Contacts._();
+  factory Contacts({
+    void Function()? onChange,
+    void Function(ContactEvent contactEvent)? onCreate,
+    void Function(ContactEvent contactEvent)? onUpdate,
+    void Function(ContactEvent contactEvent)? onDelete,
+  }) {
+    _instance ??= Contacts._(
+      onChange,
+      onCreate,
+      onUpdate,
+      onDelete,
+    );
+
     return _instance!;
   }
 
-  Contacts._();
+  Contacts._(
+    this._onChange,
+    this._onCreate,
+    this._onUpdate,
+    this._onDelete,
+  );
 
   @override
   void hasChanged() {
