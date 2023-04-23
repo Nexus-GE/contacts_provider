@@ -3,7 +3,7 @@ import 'package:contacts_provider/src/infrastructure/events.dart';
 import 'package:flutter/material.dart';
 
 class ContactsProvider extends InheritedWidget {
-  late final Contacts _contacts;
+  late final Contacts contacts;
 
   ContactsProvider({
     super.key,
@@ -12,7 +12,7 @@ class ContactsProvider extends InheritedWidget {
     void Function(ContactEvent contactEvent)? onUpdate,
     void Function(ContactEvent contactEvent)? onDelete,
     required super.child,
-  }) : _contacts = Contacts(
+  }) : contacts = Contacts(
           onChange: onChange,
           onCreate: onCreate,
           onUpdate: onUpdate,
