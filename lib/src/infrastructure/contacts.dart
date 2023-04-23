@@ -54,30 +54,17 @@ class Contacts implements IContacts {
     _initContactListener();
 
     if (!localCopyExists) {
-      await updateLocalCopy();
-
-      final initialEvent = ContactEvent(
-        effectedContacts: [],
-        event: ContactEventType.initial,
-        contactList: localCopy.values.toList(),
-      );
-
-      streamController.add(initialEvent);
-    } else {}
+      _initialLoad();
+    } else {
+      await _checkContactChange();
+    }
   }
 
   _initContactListener() {
     Listentocontacts().onContactsChanged.listen((_) async {
       if (_onChange != null) _onChange!();
 
-      final latest = await readContacts();
-      ContactsDelegate(
-        streamController,
-        localCopy: localCopy,
-        latest: latest,
-      )();
-
-      updateLocalCopy();
+      _checkContactChange();
     });
   }
 
@@ -110,6 +97,30 @@ class Contacts implements IContacts {
     );
   }
 
+  Future _checkContactChange() async {
+    final latestContacts = await readContacts();
+
+    ContactsDelegate(
+      streamController,
+      localCopy: localCopy,
+      latest: latestContacts,
+    )();
+
+    updateLocalCopy(latestContacts: latestContacts);
+  }
+
+  Future _initialLoad() async {
+    await updateLocalCopy();
+
+    final initialEvent = ContactEvent(
+      effectedContacts: [],
+      event: ContactEventType.initial,
+      contactList: localCopy.values.toList(),
+    );
+
+    streamController.add(initialEvent);
+  }
+
   List<Contact> _deleteContacts(List<Contact> effectedContacts) {
     final local = localCopy;
     for (var contact in effectedContacts) {
@@ -134,9 +145,10 @@ class Contacts implements IContacts {
     return local.values.toList();
   }
 
-  FutureOr<void> updateLocalCopy() async {
-    final contacts = await readContacts();
-    final stringifiedContacts = ContactConverter.stringify(contacts);
+  FutureOr<void> updateLocalCopy({List<Contact>? latestContacts}) async {
+    latestContacts ??= await readContacts();
+
+    final stringifiedContacts = ContactConverter.stringify(latestContacts);
 
     await _prefs?.setString(sharedPrefsKeyName, stringifiedContacts);
   }
