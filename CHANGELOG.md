@@ -1,7 +1,11 @@
+## [0.1.3](https://github.com/Nexus-GE/contacts_provider/releases/tag/v0.1.3)
+* Enable passing event handlers from provider and hide the interfaces
+* Make contacts property final
+
 ## [0.1.2](https://github.com/Nexus-GE/contacts_provider/releases/tag/v0.1.2)
 
-* added inherited widget to provider contacts down to the tree 
-* added contacts provider for cleaner interface
+* Added inherited widget to provider contacts down to the tree 
+* Added contacts provider for cleaner interface
 
 ## [0.1.1](https://github.com/Nexus-GE/contacts_provider/releases/tag/v0.1.1)
 
