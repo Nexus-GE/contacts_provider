@@ -47,29 +47,20 @@ class Contacts implements IContacts {
     throw UnimplementedError();
   }
 
-  Future<void> init(
-      //   Function(ContactEvent contactEvent)? onDelete,
-      //   Function(ContactEvent contactEvent)? onUpdate,
-      //   Function(ContactEvent contactEvent)? onCreate,
-      //   Function()? onChange,
-      ) async {
-    //   _onChange = onChange;
-    //   _onDelete = onDelete;
-    //   _onUpdate = onUpdate;
-    //   _onCreate = onCreate;
+  Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
 
     if (!localCopyExists) {
       await updateLocalCopy();
+
+      final initialEvent = ContactEvent(
+        effectedContacts: [],
+        event: ContactEventType.initial,
+        contactList: localCopy.values.toList(),
+      );
+
+      streamController.add(initialEvent);
     }
-
-    final initialEvent = ContactEvent(
-      effectedContacts: [],
-      event: ContactEventType.initial,
-      contactList: localCopy.values.toList(),
-    );
-
-    streamController.add(initialEvent);
 
     Listentocontacts().onContactsChanged.listen((_) async {
       if (_onChange != null) _onChange!();
@@ -89,22 +80,19 @@ class Contacts implements IContacts {
         switch (contactEvent.event) {
           case ContactEventType.created:
             if (_onCreate != null) {
-              contactEvent.contactList =
-                  _createContacts(contactEvent.effectedContacts);
+              contactEvent.contactList = _createContacts(contactEvent.effectedContacts);
               _onCreate!(contactEvent);
             }
             break;
           case ContactEventType.deleted:
             if (_onDelete != null) {
-              contactEvent.contactList =
-                  _deleteContacts(contactEvent.effectedContacts);
+              contactEvent.contactList = _deleteContacts(contactEvent.effectedContacts);
               _onDelete!(contactEvent);
             }
             break;
           case ContactEventType.updated:
             if (_onUpdate != null) {
-              contactEvent.contactList =
-                  _updateContacts(contactEvent.effectedContacts);
+              contactEvent.contactList = _updateContacts(contactEvent.effectedContacts);
               _onUpdate!(contactEvent);
             }
             break;
