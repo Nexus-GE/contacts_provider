@@ -25,7 +25,7 @@ void main() async {
 /home.dart
 ```dart
 
-class _HomePageState extends StatelessWidget {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ContactsBuilder(
@@ -35,25 +35,23 @@ class _HomePageState extends StatelessWidget {
         // you can access the event from here.
 
         // new contact list after event has happened
-        event.contactList; 
+        event.contactList;
 
         // only effected contact list, in case of create
         // it will be the contacts that were created
-        event.effectedContacts; 
+        event.effectedContacts;
         // event type
-        event.event; 
+        event.event;
       },
       onUpdate: (event) {
         // on update behavior goes here
       },
       onDelete: (event) {
         // on delete behavior goes here
-
-        
       },
       onChange: () {
         // If you specify this, it will be executed on any changes will happen in contacts;
-      }
+      },
       builder: (context, data) {
         // receive new list of contacts here.
         final allContacts = data.contactList;
@@ -66,11 +64,6 @@ class _HomePageState extends StatelessWidget {
         );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
 
