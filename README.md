@@ -13,9 +13,12 @@ You can ask for the permissions wherever you like, it is just for the demonstrat
 ```dart
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // initializing contacts_provider
   final contacts = Contacts();
-  await contacts.init();
   await contacts.handlePermissions();
+  await contacts.init();
+
   runApp(const MainApp());
 }
 
