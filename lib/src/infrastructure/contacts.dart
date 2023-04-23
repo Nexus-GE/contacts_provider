@@ -100,6 +100,12 @@ class Contacts implements IContacts {
   Future _checkContactChange() async {
     final latestContacts = await readContacts();
 
+    final initialEvent = ContactEvent(
+      effectedContacts: [],
+      event: ContactEventType.initial,
+      contactList: latestContacts,
+    );
+
     ContactsDelegate(
       streamController,
       localCopy: localCopy,
@@ -107,6 +113,7 @@ class Contacts implements IContacts {
     )();
 
     updateLocalCopy(latestContacts: latestContacts);
+    streamController.add(initialEvent);
   }
 
   Future _initialLoad() async {
