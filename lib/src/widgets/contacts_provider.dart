@@ -1,10 +1,8 @@
 import 'package:contacts_provider/contacts_provider.dart';
 import 'package:contacts_provider/src/infrastructure/events.dart';
-import 'package:contacts_provider/src/widgets/inherited_contacts.dart';
 import 'package:flutter/material.dart';
 
-class ContactsProvider extends StatelessWidget {
-  final Widget child;
+class ContactsProvider extends InheritedWidget {
   late final Contacts _contacts;
 
   ContactsProvider({
@@ -13,7 +11,7 @@ class ContactsProvider extends StatelessWidget {
     void Function(ContactEvent contactEvent)? onCreate,
     void Function(ContactEvent contactEvent)? onUpdate,
     void Function(ContactEvent contactEvent)? onDelete,
-    required this.child,
+    required super.child,
   }) : _contacts = Contacts(
           onChange: onChange,
           onCreate: onCreate,
@@ -22,10 +20,15 @@ class ContactsProvider extends StatelessWidget {
         );
 
   @override
-  Widget build(BuildContext context) {
-    return InheritedContacts(
-      contacts: _contacts,
-      child: child,
-    );
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;
+
+  static ContactsProvider? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<ContactsProvider>();
+  }
+
+  static ContactsProvider of(BuildContext context) {
+    final ContactsProvider? result = maybeOf(context);
+    assert(result != null, 'No ContactsProvider found in context');
+    return result!;
   }
 }
