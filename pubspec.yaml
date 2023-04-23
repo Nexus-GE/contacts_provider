@@ -1,6 +1,6 @@
 name: contacts_provider
 description: Flutter package for observing contact changes, and providing onDelete, onCreate, onUpdate and onChange events.
-version: 0.1.1
+version: 0.1.2
 
 homepage: https://github.com/Nexus-GE/contacts_provider
 repository: https://github.com/Nexus-GE/contacts_provider
