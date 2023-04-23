@@ -17,7 +17,9 @@ class ContactsProvider extends InheritedWidget {
           onCreate: onCreate,
           onUpdate: onUpdate,
           onDelete: onDelete,
-        );
+        ) {
+    contacts.init();
+  }
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;

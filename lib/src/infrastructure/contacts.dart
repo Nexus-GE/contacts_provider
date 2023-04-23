@@ -204,7 +204,7 @@ class Contacts implements IContacts {
     throw UnimplementedError();
   }
 
-  Future handlePermissions() async {
+  static Future handlePermissions() async {
     var contactStatus = await Permission.contacts.status;
     if (contactStatus.isDenied) {
       await Permission.contacts.request().isGranted;

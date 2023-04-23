@@ -8,6 +8,7 @@ add these to android manifest file:
 ```
 
 
+## Manual initialization
 /main.dart initializing the contacts and asking for `permissions`.<br>
 You can ask for the permissions wherever you like, it is just for the demonstration purposes.
 ```dart
@@ -24,7 +25,7 @@ void main() async {
 
 ```
 
-
+## Using `ContactsBuilder`
 /home.dart
 ```dart
 
@@ -71,3 +72,33 @@ class HomePage extends StatelessWidget {
 }
 
 ```
+
+## Initializing with `ContactsProvider`
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Contacts.handlePermissions();
+  runApp(const MainApp());
+}
+
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ContactsProvider(
+      child: MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: HomePage(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+```
+
