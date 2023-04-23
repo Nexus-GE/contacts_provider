@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ContactsProvider extends StatelessWidget {
   final Widget child;
-  late Contacts _contacts;
+  late final Contacts _contacts;
 
   ContactsProvider({
     super.key,
