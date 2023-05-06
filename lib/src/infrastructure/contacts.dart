@@ -16,6 +16,7 @@ typedef ContactsAction = Function(ContactEvent contactEvent);
 class Contacts implements IContacts {
   SharedPreferences? _prefs;
   BehaviorSubject<ContactEvent> streamController = BehaviorSubject();
+  BehaviorSubject<List<Contact>> contactsListStreamController = BehaviorSubject();
 
   void Function()? _onChange;
 
@@ -124,6 +125,7 @@ class Contacts implements IContacts {
 
     ContactsDelegate(
       streamController,
+      contactsListStreamController,
       localCopy: localCopy,
       latest: latestContacts,
     )();

@@ -6,7 +6,8 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract class ContactsStreamable {
-  StreamController get eventStreamController;
+  BehaviorSubject<ContactEvent> get eventStreamController;
+  BehaviorSubject<List<Contact>> get contactsListStreamController;
 }
 
 mixin BaseEvents {
@@ -19,18 +20,24 @@ class ContactsDelegate extends ContactsStreamable with BaseEvents {
   final Map<String, Contact> localCopy;
   final List<Contact> latest;
 
-  final BehaviorSubject _eventStreamController;
+  final BehaviorSubject<ContactEvent> _eventStreamController;
+  final BehaviorSubject<List<Contact>> _contactsListStreamController;
 
   ContactsDelegate(
-    this._eventStreamController, {
+    this._eventStreamController,
+    this._contactsListStreamController, {
     required this.localCopy,
     required this.latest,
   });
 
   @override
-  StreamController get eventStreamController => _eventStreamController;
+  BehaviorSubject<ContactEvent> get eventStreamController => _eventStreamController;
+
+  @override
+  BehaviorSubject<List<Contact>> get contactsListStreamController => _contactsListStreamController;
 
   call() {
+    _contactsListStreamController.add(latest);
     for (var latestContact in latest) {
       if (hasCreated(latestContact, localCopy)) {
         _create.effectedContacts.add(latestContact);
