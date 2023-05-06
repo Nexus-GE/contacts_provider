@@ -1,3 +1,10 @@
+## [0.1.4](https://github.com/Nexus-GE/contacts_provider/releases/tag/v0.1.4)
+* separate stream for contacts list to be delivered to builder
+* type safety to the streams
+* make stream controllers private
+* ContactBuilder now listens to only list list stream.
+* Exported only streams and hid the controllers
+
 ## [0.1.3](https://github.com/Nexus-GE/contacts_provider/releases/tag/v0.1.3)
 * Enable passing event handlers from provider and hide the interfaces
 * Make contacts property final

@@ -56,13 +56,12 @@ class HomePage extends StatelessWidget {
       onChange: () {
         // If you specify this, it will be executed on any changes will happen in contacts;
       },
-      builder: (context, data) {
+      builder: (context, allLatestContacts) {
         // receive new list of contacts here.
-        final allContacts = data.contactList;
         return ListView.builder(
-          itemCount: allContacts.length,
+          itemCount: allLatestContacts,
           itemBuilder: (BuildContext context, int index) {
-            final contact = allContacts[index];
+            final contact = allLatestContacts[index];
             return ContactListTile(contact: contact);
           },
         );
