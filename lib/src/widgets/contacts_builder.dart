@@ -1,8 +1,9 @@
+import 'package:contacts_provider/contacts_provider.dart';
 import 'package:contacts_provider/src/infrastructure/contacts.dart';
 import 'package:contacts_provider/src/infrastructure/events.dart';
 import 'package:flutter/material.dart';
 
-typedef ContactsBuilderBuild = Widget Function(BuildContext, ContactEvent);
+typedef ContactsBuilderBuild = Widget Function(BuildContext, List<Contact>);
 
 class ContactsBuilder extends StatefulWidget {
   final Function()? onChange;
@@ -38,8 +39,8 @@ class _ContactsBuilderState extends State<ContactsBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ContactEvent>(
-      stream: _contacts.streamController.stream,
+    return StreamBuilder<List<Contact>>(
+      stream: _contacts.contactListStream,
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
           return const CircularProgressIndicator();

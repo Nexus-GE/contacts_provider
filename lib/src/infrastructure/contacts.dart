@@ -15,8 +15,11 @@ typedef ContactsAction = Function(ContactEvent contactEvent);
 
 class Contacts implements IContacts {
   SharedPreferences? _prefs;
-  BehaviorSubject<ContactEvent> _streamController = BehaviorSubject();
-  BehaviorSubject<List<Contact>> _contactsListStreamController = BehaviorSubject();
+  final BehaviorSubject<ContactEvent> _eventStreamController = BehaviorSubject();
+  Stream<ContactEvent> get eventStream => _eventStreamController.stream;
+
+  final BehaviorSubject<List<Contact>> _contactsListStreamController = BehaviorSubject();
+  Stream<List<Contact>> get contactListStream => _contactsListStreamController.stream;
 
   void Function()? _onChange;
 
@@ -86,7 +89,7 @@ class Contacts implements IContacts {
   }
 
   _initEventListener() {
-    streamController.stream.listen(
+    _eventStreamController.stream.listen(
       (contactEvent) {
         switch (contactEvent.event) {
           case ContactEventType.created:
@@ -124,14 +127,14 @@ class Contacts implements IContacts {
     );
 
     ContactsDelegate(
-      streamController,
-      contactsListStreamController,
+      _eventStreamController,
+      _contactsListStreamController,
       localCopy: localCopy,
       latest: latestContacts,
     )();
 
     updateLocalCopy(latestContacts: latestContacts);
-    streamController.add(initialEvent);
+    _eventStreamController.add(initialEvent);
   }
 
   Future _initialLoad() async {
@@ -143,7 +146,7 @@ class Contacts implements IContacts {
       contactList: localCopy.values.toList(),
     );
 
-    streamController.add(initialEvent);
+    _eventStreamController.add(initialEvent);
   }
 
   List<Contact> _deleteContacts(List<Contact> effectedContacts) {
@@ -215,6 +218,7 @@ class Contacts implements IContacts {
   }
 
   void dispose() {
-    streamController.close();
+    _eventStreamController.close();
+    _contactsListStreamController.close();
   }
 }
