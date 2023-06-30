@@ -27,6 +27,10 @@ class ContactsProvider extends InheritedWidget {
     }
   }
 
+  Future<void> init() async {
+    await _contacts.init();
+  }
+
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;
 
